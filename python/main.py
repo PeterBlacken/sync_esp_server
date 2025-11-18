@@ -91,6 +91,13 @@ def main() -> None:
     logging.basicConfig(level=args.log_level, format="[%(levelname)s] %(message)s")
     logger.setLevel(args.log_level)
 
+    if args.host in {"127.0.0.1", "localhost"}:
+        logger.warning(
+            "Server is binding to %s; devices on the LAN will not be able to connect. "
+            "Use --host 0.0.0.0 or your LAN IP if you need remote access.",
+            args.host,
+        )
+
     server, log = build_server(args.host, args.port)
     log.info("Starting time-sync server on %s:%s", args.host, args.port)
     try:
